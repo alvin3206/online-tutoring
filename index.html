@@ -80,7 +80,27 @@
   <div class="container col-10 p-4 mt-4">
     <div class="row flex-lg-row-reverse align-items-center g-5">
       <div class="col-lg-6">
-        <img src="./public/images/landing-image.jpg" class="d-block mx-lg-auto img-fluid border rounded-3 shadow-lg" alt="Bootstrap Themes" width="700" height="640" loading="lazy">
+        <!--Carousel feature-->
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="./public/images/landing-image.jpg" alt="First slide">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./public/images/t2.jpg" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./public/images/t3.jpg" alt="Third slide">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+
       </div>
       <div class="col-lg-6">
         <h1 class="display-6 fw-bold lh-1 mb-3 brand-font">Always Exploring</h1>
@@ -139,7 +159,7 @@
         <!-- <p class="col-lg-10 fs-4">"You don’t have to be great to start. But you have to start to be great."</p> -->
         <figure>
           <blockquote class="blockquote">
-            <p>You don’t have to be great to start. But you have to start to be great.</p>
+            <p>You don’t have to be great to start, but you have to start to be great.</p>
           </blockquote>
           <figcaption class="blockquote-footer">
             Zig Ziglar
@@ -186,7 +206,10 @@
     </footer>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
