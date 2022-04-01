@@ -21,10 +21,11 @@ class Cards extends React.Component {
     var rowCount = 0;
 
     if (!focusView) {
+      console.log(this.props.tutorList);
       this.props.tutorList.forEach((tutor, id) => {
         if (tutor.first_name.indexOf(filterText) === -1 && tutor.last_name.indexOf(filterText) === -1) {
           var noMatchSubject = true;
-          tutor.subject.forEach((subject, sid) => {
+          tutor.certificate.forEach((subject, sid) => {
             if (subject.indexOf(filterText) !== -1) noMatchSubject = false;
           });
           if (noMatchSubject) return;
