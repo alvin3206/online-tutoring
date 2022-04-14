@@ -1,0 +1,39 @@
+[
+{
+ "first_name" : "Rosa",
+ "last_name" : "SH",
+ "certificate" : ["Math", "Music"],
+ "rating" : 5.0,
+ "city" : "Racine",
+ "country" : "USA",
+ "about" : "Travel enthusiast. Zombie scholar. Alcohol trailblazer. Coffee fan. Award-winning internet specialist. Reader. Extreme analyst. Gamer.",
+ "available" : true
+},
+{
+ "first_name" : "Maddle",
+ "last_name" : "S",
+ "certificate" : ["English"],
+ "rating" : 4.9,
+ "city" : "Vermont",
+ "country" : "USA",
+ "about" : "Student. Pop cultureaholic. Bacon scholar. Travel fanatic. Tv geek. Food trailblazer. Twitter buff."
+},
+{
+ "first_name" : "Deborah",
+ "last_name" : "Lea",
+ "certificate" : ["Chinese"],
+ "rating" : 4.7,
+ "city" : "Dalls",
+ "country" : "USA",
+ "about" : "Total problem solver. Creator. Writer. Beer junkie. Tv enthusiast. Introvert. Communicator. Friendly organizer."
+},
+{
+    "first_name" : "Alvin",
+    "last_name" : "Chen",
+    "certificate" : ["Coding"],
+    "rating" : 4.5,
+    "city" : "Dalls",
+    "country" : "USA",
+    "about" : "Passionate travel ninja. Alcohol practitioner. Communicator. Student. Tv expert. Extreme organizer."
+   }
+]
