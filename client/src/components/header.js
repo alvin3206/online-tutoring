@@ -1,39 +1,46 @@
 import React, { Component } from 'react';
+import { Navbar, Container, Nav, Button, Form } from 'react-bootstrap';
+// import "./style.module.css";
 
 class Header extends React.Component {
 
     render() {
         return (
             <div className="sticky-top shadow-sm bg-light">
-                <div className="top-left-nav">
-                    <div className="container">
-                        <nav className="navbar navbar-expand-lg navbar-light">
-                            <div className="container-fluid">
-                                <a className="navbar-brand nav-font brand-font" href="#">
-                                    <img src="./images/logo-lg.svg" alt="" width="72" height="72" className="d-inline-block" />
-                                        <span className="logo-move">TUTOWL</span>
-                                </a>
-                                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span className="navbar-toggler-icon"></span>
-                                </button>
-                                <div className="collapse navbar-collapse" id="navbarNav">
-                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                        <li className="nav-item">
-                                            <a className="nav-link" href="#">Sign-Up</a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a className="nav-link" href="#">Login</a>
-                                        </li>
-                                    </ul>
-                                    <form className="d-flex">
-                                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                                            <button className="btn btn-outline-success" type="submit">Search</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
+                <Container>
+                    <Navbar bg="light" expand="lg">
+                        <Container fluid>
+                            <Navbar.Brand href="/" className="brand-font nav-font">
+                                <img
+                                    src="./images/logo-lg.svg"
+                                    width="72"
+                                    height="72"
+                                    className="d-inline-block"
+                                    alt="Tutowl logo"
+                                />
+                                <span className="logo-move">TUTOWL</span>
+                            </Navbar.Brand>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Navbar.Collapse id="basic-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/tutors">Tutors</Nav.Link>
+                                    <Nav.Link href="/appointments">Appointments</Nav.Link>
+                                </Nav>
+                                <Nav className="d-flex">
+                                    <Nav.Link href="/signup">Sign-Up</Nav.Link>
+                                    <Nav.Link href="/login">Login</Nav.Link>
+                                </Nav>
+
+                                {/* <Form className="d-flex">
+                                    <Form.Control type="search" placeholder="Search" className="me-2" />
+                                    <Button variant="outline-success" type="submit">
+                                        Search
+                                    </Button>
+                                </Form> */}
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                </Container>
             </div>
         );
     }

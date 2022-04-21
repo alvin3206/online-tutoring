@@ -1,0 +1,38 @@
+[
+    {
+        "tutor_id" : "",
+        "user_id" :  "" ,
+        "start" : "2022-04-20 03:00:00" ,
+        "end" : "2022-04-20 04:30:00" ,
+        "duration" : 1.5,
+        "finished" : false ,
+        "rating" : null
+    },
+    {
+        "tutor_id" : "",
+        "user_id" :  "" ,
+        "start" : "2022-04-21 08:30:00" ,
+        "end" : "2022-04-21 10:30:00" ,
+        "duration" : 2,
+        "finished" : false ,
+        "rating" : null
+    },
+    {
+        "tutor_id" : "",
+        "user_id" :  "" ,
+        "start" : "2022-04-22 17:00:00" ,
+        "end" : "2022-04-22 22:00:00" ,
+        "duration" : 5,
+        "finished" : false ,
+        "rating" : null
+    },
+    {
+        "tutor_id" : "",
+        "user_id" :  "" ,
+        "start" : "2022-04-21 12:00:00" ,
+        "end" : "2022-04-21 13:30:00" ,
+        "duration" : 1.5,
+        "finished" : false ,
+        "rating" : null
+    }
+]

@@ -1,95 +1,24 @@
 import React, { Component } from 'react';
+import { Route, Routes } from "react-router-dom";
 import Header from './components/header';
-import Cards from './components/cards';
-import Search from './components/search';
+// import Search from './components/search';
 import Footer from './components/footer';
+import Home from './components/home';
+import Tutors from './components/tutors';
+import Appointments from './components/appointments';
 
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      filterText: '',
-      availableOnly: false,
-      tutors: [],
-      focusView: false,
-      focusCardId: 0
-    };
-    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-    this.handlFocusCardChange = this.handlFocusCardChange.bind(this);
-  }
-
-  handleFilterTextChange(filterText) {
-    this.setState({
-      filterText: filterText
-    });
-  }
-
-  handlFocusCardChange(key) {
-    this.setState({
-      focusView: !this.state.focusView,
-      focusCardId: parseInt(key[key.length - 1])
-    })
-  }
-
-  componentDidMount() {
-    fetch('./tutors.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ tutors: data })
-      })
-      .catch(console.log)
-  }
-
-  render() {
-    const isFocusView = this.state.focusView;
-    let block;
-    if (isFocusView) {
-      block = (<div className="container col-10 p-4 mt-4">
-      <Cards
-        tutorList={this.state.tutors}
-        filterText={this.state.filterText}
-        availableOnly={this.state.availableOnly}
-        onFocusCardChange={this.handlFocusCardChange}
-        focusView={this.state.focusView}
-        focusCardId={this.state.focusCardId}
-      />
-    </div>);
-    } else {
-      block = (<div className="container col-10 p-4 mt-4">
-      <Search
-        filterText={this.state.filterText}
-        availableOnly={this.state.availableOnly}
-        onFilterTextChange={this.handleFilterTextChange}
-        onAvailableChange={this.handleAvailableChange}
-        focusView={this.state.focusView}
-      />
-      <Cards
-        tutorList={this.state.tutors}
-        filterText={this.state.filterText}
-        availableOnly={this.state.availableOnly}
-        onFocusCardChange={this.handlFocusCardChange}
-        focusView={this.state.focusView}
-        focusCardId={this.state.focusCardId}
-      />
-    </div>);
-    }
-    return (
-      <div>
-        <Header />
-          {block}
-
-        <Footer />
-      </div>
-
-    );
-
-  }
-}
+const App = () => {
+  return (
+    <div>
+      <Header />
+      <Routes>     
+        <Route path="/tutors" element={<Tutors />} />
+        <Route path="/appointments" element={<Appointments />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+      <Footer />
+    </div>
+  );
+};
 
 export default App;
