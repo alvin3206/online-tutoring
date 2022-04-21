@@ -1,9 +1,10 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { Row, Card, Col, Button } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 
 function Cards(props) {
+  const navigate = useNavigate();
   const rows = [];
   props.tutorList.forEach((tutor, id) => {
     rows.push(
@@ -20,7 +21,10 @@ function Cards(props) {
             </div>
             <p className="card-text text-truncate">{tutor.about}</p>
             <div className="d-flex align-items-end flex-column">
-              <Button variant="success" onClick={() => props.focusChange(tutor._id)} className="ml-auto">Detail</Button>
+              {/* <Link to={`/tutors/${tutor._id}`} onClick={() => props.focusChange(tutor._id)} > */}
+                <Button variant="success" className="ml-auto" onClick={() => navigate(`/tutors/${tutor._id}`)}>Detail</Button>
+              {/* </Link> */}
+
             </div>
 
           </div>

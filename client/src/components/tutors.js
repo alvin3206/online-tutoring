@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Cards from './cards';
-import Expand from './expand';
 // import ReactLoading from 'react-loading';
 import { Container, Form, Spinner } from 'react-bootstrap';
 
@@ -11,8 +10,8 @@ function Tutors() {
     const [isLoading, setLoading] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [focusView, setFocusView] = useState(false);
-    const [focusCardId, setFocusCardId] = useState('');
+    // const [focusView, setFocusView] = useState(false);
+    // const [focusCardId, setFocusCardId] = useState('');
 
     useEffect(() => {
         setLoading(true);
@@ -48,15 +47,15 @@ function Tutors() {
             setFilteredResults(tutors)
         }
     }
-    function focusChange(id) {
-        if (id !== '') {
-            setFocusView(true);
-            setFocusCardId(id);
-        } else {
-            setFocusView(false);
-            setFocusCardId('');
-        }
-    }
+    // function focusChange(id) {
+    //     if (id !== '') {
+    //         setFocusView(true);
+    //         setFocusCardId(id);
+    //     } else {
+    //         setFocusView(false);
+    //         setFocusCardId('');
+    //     }
+    // }
 
     if (isLoading) {
         return (<div className="d-flex justify-content-center">
@@ -83,7 +82,8 @@ function Tutors() {
                     </div>
                 </div>
                 <hr />
-                {focusView ? searchInput.length > 1 ? <Expand tutorList={filteredResults} id={focusCardId} focusChange={focusChange}></Expand> : <Expand tutorList={tutors} id={focusCardId} focusChange={focusChange}></Expand> : searchInput.length > 1 ? <Cards tutorList={filteredResults} focusChange={focusChange} /> : <Cards tutorList={tutors} focusChange={focusChange} />}
+                {searchInput.length > 1 ? <Cards tutorList={filteredResults} /> : <Cards tutorList={tutors} />}
+                {/* {focusView ? searchInput.length > 1 ? <Expand tutorList={filteredResults} id={focusCardId} focusChange={focusChange}></Expand> : <Expand tutorList={tutors} id={focusCardId} focusChange={focusChange}></Expand> : searchInput.length > 1 ? <Cards tutorList={filteredResults} focusChange={focusChange} /> : <Cards tutorList={tutors} focusChange={focusChange} />} */}
             </Container>
         );
     }
