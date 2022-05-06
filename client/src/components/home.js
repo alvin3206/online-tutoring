@@ -6,7 +6,7 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <Container className="col-10 p-4 mt-4">
+                <Container className="p-4 mt-4">
                     <Row className="flex-lg-row-reverse align-items-center g-5">
                         <Col lg="6">
                             <Carousel indicators={false}>

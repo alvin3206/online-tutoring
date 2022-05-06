@@ -52,22 +52,23 @@ function Appointment() {
             <Spinner animation="border" role="status" className='mx-auto my-5'>
                 <span className="visually-hidden">Loading...</span>
             </Spinner></div>);
-    } 
+    }
     else if (error) {
         return (
             <div>Error: {error.message}</div>
         );
     }
     else {
-        
-        return (<Container className='col-10 p-4 my-2'>
-            <div className='d-flex'>
-                <div className='me-auto'>
-                    <h3 className='brand-font p-1'>Appointment</h3>
+
+        return (
+            <Container className='p-4 my-2'>
+                <div className='d-flex'>
+                    <div className='me-auto'>
+                        <h3 className='brand-font p-1'>Appointment</h3>
+                    </div>
                 </div>
-            </div>
-            <hr />
-            <Row className="g-4">
+                <hr />
+                <Row className="g-4">
                     <Col>
                         <Card className="shadow-sm">
                             <div className="card-body">
@@ -77,14 +78,14 @@ function Appointment() {
                                     <p className="card-text">{new Date(Date.parse(appointment.start)).toString()}</p>
                                     <h6 className="card-subtitle">To</h6>
                                     <p className="card-text">{new Date(Date.parse(appointment.end)).toString()}</p>
-                                    <hr/>
+                                    <hr />
                                     <div className='col'>
                                         <h4 className='brand-font'>Tutor</h4>
                                         <h6 className="card-subtitle">{tutor.first_name} {tutor.last_name}</h6>
-                                        </div>
+                                    </div>
                                     <div className='col'>
-                                    <h4 className='brand-font'>Student</h4>
-                                    <h6 className="card-subtitle">{appointment.user_id}</h6>
+                                        <h4 className='brand-font'>Student</h4>
+                                        <h6 className="card-subtitle">{appointment.user_id}</h6>
                                     </div>
                                 </Row>
                                 <div className="d-flex align-items-end flex-column">
@@ -96,7 +97,7 @@ function Appointment() {
                         </Card>
                     </Col>
                 </Row>
-        </Container>);
+            </Container>);
     }
 
 }

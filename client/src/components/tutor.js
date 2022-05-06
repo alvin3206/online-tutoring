@@ -55,7 +55,7 @@ function Tutor(props) {
             })
     }, []);
 
-    
+
 
     function onSlotChange(slotInfo) {
         var startDate = moment(slotInfo.start.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
@@ -84,7 +84,7 @@ function Tutor(props) {
             object.end = new Date(object.end);
         });
         return (
-            <Container className='col-10 p-4 my-2'>
+            <Container className='p-4 my-2'>
                 <div className='d-flex'>
                     <div className='me-auto'>
                         <h3 className='brand-font p-1'>Tutor</h3>
@@ -106,7 +106,7 @@ function Tutor(props) {
                                 <p className="card-text text-truncate">{tutor.about}</p>
                                 <div className="d-flex align-items-end flex-column">
                                     {/* <Link to={`/tutors`} onClick={() => props.focusChange("") } > */}
-                                        <Button variant="success" className="ml-auto"  onClick={() => navigate("/tutors") }>Go Back</Button>
+                                    <Button variant="success" className="ml-auto" onClick={() => navigate("/tutors")}>Go Back</Button>
                                     {/* </Link> */}
 
                                 </div>

@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Spinner, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import Cookies from 'js-cookie';
 
 function Appointments() {
+    console.log(Cookies.get('token'));
     const API_URL = "http://localhost:3000/";
     const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
@@ -40,7 +42,7 @@ function Appointments() {
             </Spinner></div>);
     }
     else {
-        return (<Container className='col-10 p-4 my-2'>
+        return (<Container className='p-4 my-2'>
             <div className='d-flex'>
                 <div className='me-auto'>
                     <h3 className='brand-font p-1'>Appointments</h3>
