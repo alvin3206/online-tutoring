@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
     else {
         try {
             var decoded = jwt.verify(token, 'secretkey');
-            console.log(decoded);
+            // console.log(decoded);
             return next();
         } catch (err) {
             return res.send("Invalid token!");

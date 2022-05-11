@@ -122,16 +122,16 @@ recordRoutes.route("/appointments/tutor/:id").get(function (req, res) {
         });;
 });
 
-recordRoutes.route("/appointments/:id").get(function (req, res) {
-    let db_connect = dbo.getDb().db("appointments");
-    let query = { _id: ObjectId(req.params.id) };
-    db_connect
-        .collection("records")
-        .findOne(query, function (err, result) {
-            if (err) throw err;
-            res.json(result);
-        });
-});
+// recordRoutes.route("/appointments/:id").get(function (req, res) {
+//     let db_connect = dbo.getDb().db("appointments");
+//     let query = { _id: ObjectId(req.params.id) };
+//     db_connect
+//         .collection("records")
+//         .findOne(query, function (err, result) {
+//             if (err) throw err;
+//             res.json(result);
+//         });
+// });
 
 // recordRoutes.route("/appointments/new").post(function (req, res) {
 //     let db_connect = dbo.getDb().db("appointments");

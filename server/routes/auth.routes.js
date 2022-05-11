@@ -122,6 +122,17 @@ recordRoutes.route("/tutors/:id").delete(function (req, res) {
         });
 });
 
+recordRoutes.route("/infos").post(function (req, res) {
+    let db_connect = dbo.getDb().db(req.body.cat + "s");
+    let query = { cred_id: req.body.cred_id };
+    db_connect
+        .collection("records")
+        .findOne(query, function (err, result) {
+            if (err) throw err;
+            res.json(result);
+        });
+});
+
 recordRoutes.route("/appointments").get(function (req, res) {
     let db_connect = dbo.getDb().db("appointments");
     db_connect
@@ -131,6 +142,23 @@ recordRoutes.route("/appointments").get(function (req, res) {
             if (err) throw err;
             res.json(result);
         });;
+});
+
+recordRoutes.route("/appointments").put(function (req, res) {
+    let db_connect = dbo.getDb().db("appointments");
+    let query = { _id: ObjectId(req.body.appointment_id) };
+    let updateTutor = {
+        rating: req.body.rating,
+        feedback: req.body.feedback,
+    }
+    db_connect
+        .collection("records")
+        .updateOne(query, {
+            $set: updateTutor
+        }, function (err, result) {
+            if (err) throw err;
+            res.json(result);
+        });
 });
 
 // recordRoutes.route("/appointments/tutor/:id").get(function (req, res) {
@@ -156,9 +184,9 @@ recordRoutes.route("/appointments").get(function (req, res) {
 //         });
 // });
 
-recordRoutes.route("/infos").post(function (req, res) {
-    let db_connect = dbo.getDb().db(req.body.cat + "s");
-    let query = { cred_id: req.body.cred_id };
+recordRoutes.route("/appointments/:id").get(function (req, res) {
+    let db_connect = dbo.getDb().db("appointments");
+    let query = { _id: ObjectId(req.params.id) };
     db_connect
         .collection("records")
         .findOne(query, function (err, result) {
@@ -179,7 +207,8 @@ recordRoutes.route("/appointments/new").post(function (req, res) {
         end: end,
         duration: (end - start) / (1000 * 3600),
         finished: false,
-        rating: null
+        rating: null,
+        feedback: ""
     };
     console.log(newAppointment);
     db_connect.collection("records").insertOne(newAppointment, function (err, result) {
