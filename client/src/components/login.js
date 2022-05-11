@@ -38,6 +38,28 @@ export default function Login() {
                 Cookies.set('token', data.token, { path: '/' });
                 Cookies.set('cred_id', data._id.toString(), { path: '/' });
                 Cookies.set('cat', data.cat, { path: '/' });
+                fetch(API_URL + 'infos', {
+                    // credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Access-Token': Cookies.get("token")
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        cred_id: data._id.toString(),
+                        cat: data.cat
+                    })
+        
+                })
+                    .then(res => res.json())
+                    .then((data1) => {
+                        console.log(data1);
+                        Cookies.set('cat_id', data1._id.toString(), { path: '/' });
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
                 setMessage("Success");
                 navigate("/appointments");
                 window.location.reload(false);

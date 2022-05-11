@@ -156,16 +156,27 @@ recordRoutes.route("/appointments").get(function (req, res) {
 //         });
 // });
 
+recordRoutes.route("/infos").post(function (req, res) {
+    let db_connect = dbo.getDb().db(req.body.cat + "s");
+    let query = { cred_id: req.body.cred_id };
+    db_connect
+        .collection("records")
+        .findOne(query, function (err, result) {
+            if (err) throw err;
+            res.json(result);
+        });
+});
+
 recordRoutes.route("/appointments/new").post(function (req, res) {
     let db_connect = dbo.getDb().db("appointments");
-    const start = (Date.parse(req.body.start));
-    const end = (Date.parse(req.body.end));
+    const start = new Date(req.body.start);
+    const end = new Date(req.body.end);
     console.log(end - start);
     let newAppointment = {
         tutor_id: req.body.tutor_id,
         user_id: req.body.user_id,
-        start: req.body.start,
-        end: req.body.end,
+        start: start,
+        end: end,
         duration: (end - start) / (1000 * 3600),
         finished: false,
         rating: null

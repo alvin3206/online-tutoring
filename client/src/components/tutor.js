@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Container, Row, Card, Col, Button, Spinner } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import Cookies from 'js-cookie';
 import moment from 'moment'
 import "react-big-calendar/lib/css/react-big-calendar.css";
 // import "./style.module.css";
@@ -17,7 +18,9 @@ function Tutor(props) {
     const [tutor, setTutor] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
+    const [flag, setFlag] = useState(true);
     const [isLoading, setLoading] = useState(true);
+
     useEffect(() => {
         setLoading(true);
         fetch(API_URL + 'tutors/' + params.tutorId, {
@@ -33,7 +36,8 @@ function Tutor(props) {
                 fetch(API_URL + 'appointments/tutor/' + params.tutorId, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-Access-Token': Cookies.get("token")
                     }
                 })
                     .then(res => res.json())
@@ -53,15 +57,45 @@ function Tutor(props) {
                 setError(error);
                 setLoading(false);
             })
-    }, []);
+    }, [flag]);
 
 
 
     function onSlotChange(slotInfo) {
-        var startDate = moment(slotInfo.start.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
-        var endDate = moment(slotInfo.end.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
-        console.log('startTime', startDate); //shows the start time chosen
-        console.log('endTime', endDate); //shows the end time chosen
+        // var startDate = moment(slotInfo.start.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
+        // var endDate = moment(slotInfo.end.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
+        var startDate = moment(slotInfo.start.toLocaleString()).toDate();
+        var endDate = moment(slotInfo.end.toLocaleString()).toDate();
+        var conflict = false;
+        appointments.forEach(element => {
+            if (!((element.start - endDate >= 0 || element.end - startDate <= 0))) conflict = true;
+            if (startDate < new Date()) conflict = true;
+        });
+        if (!conflict) {
+            fetch(API_URL + 'appointments/new', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Access-Token': Cookies.get("token")
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    tutor_id: params.tutorId,
+                    user_id: Cookies.get("cat_id"),
+                    start: startDate,
+                    end: endDate
+                })
+            })
+                .then(res => res.json())
+                .then((data) => {
+                    console.log(data);
+                    setFlag(!flag);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                })
+            // setAppointments((prev) => [...prev, { start: startDate, end: endDate, title: "title" }]);
+        }
     }
 
     function onEventClick(event) {
@@ -80,6 +114,7 @@ function Tutor(props) {
     } else {
         appointments.forEach(object => {
             object.title = "Occupied";
+            console.log(typeof(object.start))
             object.start = new Date(object.start);
             object.end = new Date(object.end);
         });

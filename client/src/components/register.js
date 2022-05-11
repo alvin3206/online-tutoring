@@ -86,6 +86,7 @@ export default function Register() {
                         .then(res => res.json())
                         .then((data1) => {
                             console.log(data1);
+                            Cookies.set('cat_id', data1.insertedId, { path: '/' });
                             setMessage("Success");
                             // setFormSubmit(true);
                             navigate("/appointments");

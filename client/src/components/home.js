@@ -38,7 +38,7 @@ class Home extends React.Component {
                             <p className="lead">Get a tutor 24/7 in 40+ subjects including Math, Science and English. We help thousands of
                                 students get better grades every day. Get an expert tutor now.</p>
                             <div className="d-grid gap-2 d-md-flex justify-content-md-start">
-                                <Button variant="success" size="lg" className="px-4 me-md-2" href="#">Start Explore</Button>
+                                <Button variant="success" size="lg" className="px-4 me-md-2" href="/register">Start Explore</Button>
                                 <Button variant="outline-secondary" size="lg" className="px-4" href="#benefit">Learn More</Button>
                             </div>
                         </Col>
@@ -55,7 +55,7 @@ class Home extends React.Component {
                                 <h2 className="brand-font">Verified tutors</h2>
                                 <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
                                     probably just keep going until we run out of words.</p>
-                                <a href="#" className="icon-link">
+                                <a href="#" className="/register">
                                     Call to action
                                     <i className="bi bi-chevron-right"></i>
                                 </a>
@@ -67,7 +67,7 @@ class Home extends React.Component {
                                 <h2 className="brand-font">Flexible time</h2>
                                 <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
                                     probably just keep going until we run out of words.</p>
-                                <a href="#" className="icon-link">
+                                <a href="#" className="/register">
                                     Call to action
                                     <i className="bi bi-chevron-right"></i>
                                 </a>
@@ -79,7 +79,7 @@ class Home extends React.Component {
                                 <h2 className="brand-font">Money saver</h2>
                                 <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
                                     probably just keep going until we run out of words.</p>
-                                <a href="#" className="icon-link">
+                                <a href="#" className="/register">
                                     Call to action
                                     <i className="bi bi-chevron-right"></i>
                                 </a>
@@ -89,8 +89,19 @@ class Home extends React.Component {
                 </Container>
 
                 <Container className="p-4">
-                    <Row className="align-items-center g-lg-5 py-5">
-                        <Col lg="7" className="text-center text-lg-start">
+                    <Row className="align-items-center g-lg-5 py-5 justify-content-center">
+                    <Col lg="7">
+                            <h1 className="text-center display-6 fw-bold lh-1 mb-3 brand-font">Get your free lessons</h1>
+                            <figure>
+                                <blockquote className="text-center blockquote">
+                                    <p>You don’t have to be great to start, but you have to start to be great.</p>
+                                </blockquote>
+                                <figcaption className="text-center blockquote-footer">
+                                    Zig Ziglar
+                                </figcaption>
+                            </figure>
+                        </Col>
+                        {/* <Col lg="7" className="text-center text-lg-start">
                             <h1 className="display-6 fw-bold lh-1 mb-3 brand-font">Get your free lessons</h1>
                             <figure>
                                 <blockquote className="blockquote">
@@ -118,7 +129,7 @@ class Home extends React.Component {
                                 <hr className="my-4" />
                                 <small className="text-muted">By clicking Sign up, you agree to the terms of use.</small>
                             </Form>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Container>
 

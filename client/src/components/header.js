@@ -13,6 +13,7 @@ function Header() {
         Cookies.remove("token");
         Cookies.remove("cred_id");
         Cookies.remove("cat");
+        Cookies.remove("cat_id");
         navigate("/");
         window.location.reload(false);
           
