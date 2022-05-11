@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Container, Nav, Button, Form } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 // import "./style.module.css";
 
 function Header() {
+    const navigate = useNavigate();
     const [login, setLogin] = useState(false);
+    const [cat, setCat] = useState("");
     function onLogout() {
         setLogin(false);
         Cookies.remove("token");
         Cookies.remove("cred_id");
         Cookies.remove("cat");
+        navigate("/");
+        window.location.reload(false);
+          
     }
 
     useEffect(() => {
         setLogin(Cookies.get("token") !== undefined);
+        if (Cookies.get("cat") !== undefined) {
+            setCat(Cookies.get("cat"));
+        } else {
+            setCat("");
+        }
     }, []);
     return (
         <div className="sticky-top shadow-sm bg-light">
@@ -33,11 +44,12 @@ function Header() {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
-                                <Nav.Link href="/tutors">Tutors</Nav.Link>
+                                {cat === "user" && <Nav.Link href="/tutors">Tutors</Nav.Link>}
                                 {login && <Nav.Link href="/appointments">Appointments</Nav.Link>}
                             </Nav>
                             {login ?
                                 <Nav className="d-flex">
+                                    {cat === "tutor" && <Nav.Link href="/profile">Profile</Nav.Link>}
                                     <Nav.Link onClick={() => { onLogout() }}>Logout</Nav.Link>
                                 </Nav> :
                                 <Nav className="d-flex">

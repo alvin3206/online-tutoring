@@ -24,6 +24,10 @@ function Tutors() {
         })
             .then(res => res.json())
             .then((data) => {
+                // console.log(data);
+                data = data.filter((item) => {
+                    return item.complete === true;
+                });
                 console.log(data);
                 setTutors(data);
                 setLoading(false);

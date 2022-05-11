@@ -14,12 +14,18 @@ function Appointments() {
 
     useEffect(() => {
         setLoading(true);
-        console.log(API_URL + 'appointments');
-        fetch(API_URL + 'appointments', {
+        let cat = Cookies.get("cat");
+        let cred_id = Cookies.get("cred_id");
+        fetch(API_URL + `appointments/${cat}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
+                'Accept': 'application/json',
+                'X-Access-Token': Cookies.get("token")
+            },
+            method: "POST",
+            body: JSON.stringify({
+                cred_id: cred_id,
+            })
         })
             .then(res => res.json())
             .then((data) => {

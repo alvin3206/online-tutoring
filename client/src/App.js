@@ -4,6 +4,7 @@ import Header from './components/header';
 // import Search from './components/search';
 import Footer from './components/footer';
 import Home from './components/home';
+import Login from './components/login';
 import Register from './components/register';
 import Tutors from './components/tutors';
 import Tutor from './components/tutor';
@@ -16,7 +17,7 @@ const App = () => {
     <div>
       <Header />
       <Routes>
-        {/* <Route path="/logout" element={<Logout />} /> */}
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/tutors" element={<Tutors />} />
         <Route path="/tutors/:tutorId" element={<Tutor />} />

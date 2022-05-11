@@ -47,10 +47,33 @@ recordRoutes.route("/tutors/new").post(function (req, res) {
         city: "",
         country: "",
         about: "",
+        hours: 0.0,
+        complete: false
 
     };
 
     db_connect.collection("records").insertOne(newTutor, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+    });
+});
+
+recordRoutes.route("/users/new").post(function (req, res) {
+    let db_connect = dbo.getDb().db("users");
+    // let newTutor = {
+    //     first_name: req.body.first_name,
+    //     last_name: req.body.last_name,
+    // };
+    let newUser = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        cred_id: req.body.cred_id,
+        favoraties: [],
+        hours: 0.0
+
+    };
+
+    db_connect.collection("records").insertOne(newUser, function (err, result) {
         if (err) throw err;
         res.json(result);
     });
@@ -163,6 +186,40 @@ recordRoutes.route("/appointments/:id").delete(function (req, res) {
             if (err) throw err;
             res.json(result);
         });
+});
+
+recordRoutes.route("/appointments/:cat").post(function (req, res) {
+    let db_connect = dbo.getDb().db("creds");
+    // let db_connect = dbo.getDb().db("appointments");
+    let query = { _id: ObjectId(req.body.cred_id) };
+    db_connect
+        .collection("records")
+        .findOne(query, function (err, result) {
+            if (err) throw err;
+            console.log(result);
+            let db_1 = req.params.cat + "s";
+            let db_connect_1 = dbo.getDb().db(db_1);
+            let query_1 = { cred_id: result._id.toString() };
+            db_connect_1
+                .collection("records")
+                .findOne(query_1, function (err_1, result_1) {
+                    if (err_1) throw err_1;
+                    // console.log(result_1);
+                    let db_connect_2 = dbo.getDb().db("appointments");
+                    let query_2 = {};
+                    let key = req.params.cat + "_id";
+                    query_2[key] = result_1._id.toString();
+                    // console.log(query_2);
+                    db_connect_2
+                        .collection("records")
+                        .find(query_2)
+                        .toArray(function (err_2, result_2) {
+                            if (err_2) throw err_2;
+                            res.json(result_2);
+                        });;
+                });;
+
+        });;
 });
 
 // recordRoutes.route("/register/:cat").post(function (req, res) {

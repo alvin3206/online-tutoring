@@ -66,10 +66,10 @@ export default function Register() {
             .then((data) => {
                 console.log(data);
                 Cookies.set('token', data.token, { path: '/' });
-                Cookies.set('cred_id', data.insertedId, { path: '/' });
-                Cookies.set('cat', data.insertedId, { path: '/' });
-                if (formData.catBool) {
-                    fetch(API_URL + 'tutors/new', {
+                Cookies.set('cred_id', data.insertedId.toString(), { path: '/' });
+                Cookies.set('cat', cat, { path: '/' });
+                // if (formData.catBool) {
+                    fetch(API_URL + `${cat}s/new`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json',
@@ -89,12 +89,13 @@ export default function Register() {
                             setMessage("Success");
                             // setFormSubmit(true);
                             navigate("/appointments");
+                            window.location.reload(false);
                         })
                         .catch((error) => {
                             console.log(error.message);
                             setMessage("Some errors occured");
                         });
-                }
+                // }
             })
             .catch((error) => {
                 console.log(error.message);
