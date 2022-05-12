@@ -5,9 +5,9 @@ import { Rating } from '@mui/material';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import Cookies from 'js-cookie';
 import moment from 'moment';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 // import "./style.module.css";
 
 const localizer = momentLocalizer(moment)
@@ -22,14 +22,14 @@ function Tutor(props) {
     const [error, setError] = useState(null);
     const [flag, setFlag] = useState(true);
     const [isLoading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
+    // const [message, setMessage] = useState("");
 
     useEffect(() => {
-        console.log(message);
-        if (message !== "") {
-            toast.success(message);
-            setMessage("");
-        }
+        // console.log(message);
+        // if (message !== "") {
+            // toast.success(message);
+        //     setMessage("");
+        // }
         setLoading(true);
         fetch(API_URL + 'tutors/' + params.tutorId, {
             headers: {
@@ -96,7 +96,9 @@ function Tutor(props) {
             if (!((element.start - endDate >= 0 || element.end - startDate <= 0))) conflict = true;
             if (startDate < new Date()) conflict = true;
         });
-        if (!conflict) {
+        if (conflict) {
+            props.setNote("Invalid date & time!");
+        } else {
             fetch(API_URL + 'appointments/new', {
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,8 +116,10 @@ function Tutor(props) {
                 .then(res => res.json())
                 .then((data) => {
                     console.log(data);
-                    setMessage("You made an appointment!");
+                    // setMessage("You made an appointment!");
                     setFlag(!flag);
+                    props.setNote("You made an appointment!");
+                    console.log(props.note);
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -200,7 +204,7 @@ function Tutor(props) {
                         </Card>
                     </Col>
                 </Row>
-                <ToastContainer
+                {/* <ToastContainer
                     position="top-right"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -209,7 +213,7 @@ function Tutor(props) {
                     rtl={false}
                     pauseOnFocusLoss
                     draggable
-                    pauseOnHover></ToastContainer>
+                    pauseOnHover></ToastContainer> */}
             </Container>
         );
     }

@@ -16,15 +16,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
-  const [message, setMessage] = useState("");
-
+  const [note, setNote] = useState("");
+  const [noteType, setNoteType] = useState("success");
   useEffect(() => {
-    if (message !== "") {
-      toast(message, {
-        onClose: () => setMessage("")
+    if (note !== "") {
+      toast.info(note, {
+        onOpen: () => setNote(""),
       })
     }
-}, [message]);
+  }, [note]);
 
   return (
     <div>
@@ -33,12 +33,24 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/tutors" element={<Tutors />} />
-        <Route path="/tutors/:tutorId" element={<Tutor />} />
+        <Route path="/tutors/:tutorId" element={<Tutor setNote={setNote} setNoteType={setNoteType} />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/appointments/:appointmentId" element={<Appointment />} />
         <Route path="/" element={<Home />} />
       </Routes>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored">
+      </ToastContainer>
     </div>
   );
 };
