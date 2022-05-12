@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import Header from './components/header';
 // import Search from './components/search';
@@ -12,7 +12,20 @@ import Appointments from './components/appointments';
 import Appointment from './components/appointment';
 // import Cookies from 'js-cookie';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (message !== "") {
+      toast(message, {
+        onClose: () => setMessage("")
+      })
+    }
+}, [message]);
+
   return (
     <div>
       <Header />

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Container, Spinner, Button, Row, Col, Card, Form } from 'react-bootstrap';
 import Cookies from 'js-cookie';
 import { Rating } from '@mui/material';
 
 function Appointment() {
     const API_URL = "http://localhost:3000/";
+    const navigate = useNavigate();
     const params = useParams();
     // const [appointment, setAppointment] = useState(null);
     const [tutor, setTutor] = useState(null);
@@ -171,7 +172,7 @@ function Appointment() {
                                     <div className="d-flex align-items-end">
                                         {cat === "user" && <Button variant="warning" type="submit" className="ml-auto me-3">Update</Button>}
                                         <Link to={'/appointments'} >
-                                            <Button variant="success" className="ml-auto">Go Back</Button>
+                                            <Button variant="success" className="ml-auto" onClick={() => navigate(-1)}>Go Back</Button>
                                         </Link>
                                     </div>
                                 </Form>

@@ -50,19 +50,20 @@ export default function Login() {
                         cred_id: data._id.toString(),
                         cat: data.cat
                     })
-        
+
                 })
                     .then(res => res.json())
                     .then((data1) => {
                         console.log(data1);
                         Cookies.set('cat_id', data1._id.toString(), { path: '/' });
+                        setMessage("Success");
+                        navigate("/appointments");
+                        window.location.reload(false);
                     })
                     .catch((error) => {
                         console.log(error.message);
                     });
-                setMessage("Success");
-                navigate("/appointments");
-                window.location.reload(false);
+
             })
             .catch((error) => {
                 console.log(error.message);

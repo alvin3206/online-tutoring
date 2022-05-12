@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Container, Row, Card, Col, Button, Spinner } from 'react-bootstrap';
 import { Rating } from '@mui/material';
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import Cookies from 'js-cookie';
-import moment from 'moment'
+import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import 'react-toastify/dist/ReactToastify.css';
 // import "./style.module.css";
 
 const localizer = momentLocalizer(moment)
@@ -20,8 +22,14 @@ function Tutor(props) {
     const [error, setError] = useState(null);
     const [flag, setFlag] = useState(true);
     const [isLoading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
+        console.log(message);
+        if (message !== "") {
+            toast.success(message);
+            setMessage("");
+        }
         setLoading(true);
         fetch(API_URL + 'tutors/' + params.tutorId, {
             headers: {
@@ -59,9 +67,26 @@ function Tutor(props) {
             })
     }, [flag]);
 
+    function handleEventPropGetter(eventInfo) {
+        console.log(eventInfo);
+
+        if (eventInfo.user_id === Cookies.get("cat_id")) {
+            var backgroundColor = '#408458';
+            var style = {
+                backgroundColor: backgroundColor,
+                color: 'white'
+            };
+            return {
+                style: style
+            };
+        }
+        return;
+
+    }
 
 
-    function onSlotChange(slotInfo) {
+
+    function handleSelectSlot(slotInfo) {
         // var startDate = moment(slotInfo.start.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
         // var endDate = moment(slotInfo.end.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
         var startDate = moment(slotInfo.start.toLocaleString()).toDate();
@@ -89,6 +114,7 @@ function Tutor(props) {
                 .then(res => res.json())
                 .then((data) => {
                     console.log(data);
+                    setMessage("You made an appointment!");
                     setFlag(!flag);
                 })
                 .catch((error) => {
@@ -98,8 +124,11 @@ function Tutor(props) {
         }
     }
 
-    function onEventClick(event) {
-        console.log(event) //Shows the event details provided while booking
+    function handleSelectEvent(eventInfo) {
+        if (eventInfo.user_id === Cookies.get("cat_id")) {
+            navigate("/appointments/" + eventInfo._id);
+        }
+
     }
 
     if (isLoading) {
@@ -114,7 +143,10 @@ function Tutor(props) {
     } else {
         appointments.forEach(object => {
             object.title = "Occupied";
-            console.log(typeof(object.start))
+            if (object.user_id === Cookies.get("cat_id")) {
+                object.title = "Your Appointment";
+            }
+            // console.log(typeof(object.start))
             object.start = new Date(object.start);
             object.end = new Date(object.end);
         });
@@ -150,7 +182,8 @@ function Tutor(props) {
                                 <Calendar
                                     selectable
                                     // onSelectEvent={event => onEventClick(event)}
-                                    onSelectSlot={(slotInfo) => onSlotChange(slotInfo)}
+                                    onSelectSlot={(slotInfo) => handleSelectSlot(slotInfo)}
+                                    onSelectEvent={(eventInfo) => handleSelectEvent(eventInfo)}
                                     localizer={localizer}
                                     timeslots={2}
                                     views={[Views.WEEK, Views.AGENDA]}
@@ -158,6 +191,7 @@ function Tutor(props) {
                                     events={appointments}
                                     startAccessor="start"
                                     endAccessor="end"
+                                    eventPropGetter={(eventInfo) => handleEventPropGetter(eventInfo)}
                                     style={{ height: 500 }}
                                 />
                             </div>
@@ -166,8 +200,17 @@ function Tutor(props) {
                         </Card>
                     </Col>
                 </Row>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover></ToastContainer>
             </Container>
-
         );
     }
 

@@ -6,11 +6,12 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import Cookies from 'js-cookie';
 
 function Appointments() {
-    console.log(Cookies.get('token'));
+    // console.log(Cookies.get('token'));
     const API_URL = "http://localhost:3000/";
     const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(false);
+    const [flag, setFlag] = useState(true);
 
     useEffect(() => {
         setLoading(true);
@@ -38,7 +39,27 @@ function Appointments() {
                 setError(error);
                 setLoading(false);
             })
-    }, []);
+    }, [flag]);
+
+    function handleDelete(item) {
+        fetch(API_URL + `appointments/${item._id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Access-Token': Cookies.get("token")
+            },
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then((data) => {
+                console.log(data);
+                setFlag(!flag);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            })
+        
+    }
 
 
     if (isLoading) {
@@ -69,7 +90,7 @@ function Appointments() {
                     <TableBody>
                       {appointments.map((item, index) => (
                         <TableRow key={index}>
-                            <TableCell><Link to={`/appointments/${item._id}`}><Button variant='success' size="sm" className="me-3">Detail</Button></Link>{(Date.parse(item.start) - Date.now())/(1000 * 3600) >=  24.0 ? <Link to={"/appointments"}><Button variant='warning' size="sm">Cancel</Button></Link> : ""}</TableCell>
+                            <TableCell><Link to={`/appointments/${item._id}`}><Button variant='success' size="sm" className="me-3">Detail</Button></Link>{(Date.parse(item.start) - Date.now())/(1000 * 3600) >=  24.0 ? <Button variant='warning' size="sm" onClick={() => handleDelete(item)}>Cancel</Button> : ""}</TableCell>
                             {/* <TableCell>{item.tutor_id}</TableCell> */}
                             <TableCell>{new Date(Date.parse(item.start)).toString()}</TableCell>
                             <TableCell>{new Date(Date.parse(item.end)).toString()}</TableCell>
