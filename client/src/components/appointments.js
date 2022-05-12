@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import ReactLoading from 'react-loading';
 import { Container, Spinner, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Rating } from '@mui/material';
 import Cookies from 'js-cookie';
 
 function Appointments() {
@@ -12,11 +12,11 @@ function Appointments() {
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [totalHours, setTotalHours] = useState(null);
+    const [ratings, setRatings] = useState(null);
     const [flag, setFlag] = useState(true);
-
+    let cat = Cookies.get("cat");
     useEffect(() => {
         setLoading(true);
-        let cat = Cookies.get("cat");
         let cat_id = Cookies.get("cat_id");
         let cred_id = Cookies.get("cred_id");
         fetch(API_URL + `hours/${cat}`, {
@@ -32,8 +32,7 @@ function Appointments() {
         })
             .then(res => res.json())
             .then((data) => {
-                // console.log(data);
-                fetch(API_URL + `infos/all/${cat}/${cat_id}`, {
+                fetch(API_URL + 'tutors/' + cat_id + '/rating', {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
@@ -42,34 +41,48 @@ function Appointments() {
                 })
                     .then(res => res.json())
                     .then((data) => {
-                        setTotalHours(data.hours);
-                        fetch(API_URL + `appointments/${cat}`, {
+                        // console.log(data);
+                        fetch(API_URL + `infos/all/${cat}/${cat_id}`, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json',
                                 'X-Access-Token': Cookies.get("token")
-                            },
-                            method: "POST",
-                            body: JSON.stringify({
-                                cred_id: cred_id,
-                            })
+                            }
                         })
                             .then(res => res.json())
                             .then((data) => {
-                                console.log(data);
-                                setAppointments(data);
-                                setLoading(false);
+                                setTotalHours(data.hours);
+                                if (cat === "tutor") setRatings(data.rating);
+                                fetch(API_URL + `appointments/${cat}`, {
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-Access-Token': Cookies.get("token")
+                                    },
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        cred_id: cred_id,
+                                    })
+                                })
+                                    .then(res => res.json())
+                                    .then((data) => {
+                                        console.log(data);
+                                        setAppointments(data);
+                                        setLoading(false);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.message);
+                                        setError(error);
+                                        setLoading(false);
+                                    });
                             })
                             .catch((error) => {
                                 console.log(error.message);
-                                setError(error);
-                                setLoading(false);
                             });
                     })
                     .catch((error) => {
                         console.log(error.message);
                     });
-
             })
             .catch((error) => {
                 console.log(error.message);
@@ -111,6 +124,12 @@ function Appointments() {
                 <div className='p-1'>
                     <h6 className="brand-font">Completed hours: {totalHours}</h6>
                 </div>
+                {cat === "tutor" &&
+                    <div className='p-1'>
+                        <h6 className="brand-font">Average ratings:</h6>
+                        <Rating size="small" defaultValue={ratings} precision={0.1} readOnly />
+                    </div>
+                }
             </div>
             <div className='d-flex'>
                 <div className='me-auto'>

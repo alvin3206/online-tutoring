@@ -136,6 +136,7 @@ recordRoutes.route("/tutors/:id/rating").get(function (req, res) {
         .toArray(function (err, result) {
             if (err) throw err;
             if (result) {
+                // console.log("rating process:" + result);
                 let count = 0;
                 let sum = 0;
                 result.forEach((e) => {
@@ -192,6 +193,7 @@ recordRoutes.route("/tutors/new").post(function (req, res) {
         country: "",
         about: "",
         hours: 0.0,
+        work_hours: [],
         complete: false
 
     };

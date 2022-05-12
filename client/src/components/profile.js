@@ -36,7 +36,9 @@ function Profile(props) {
     }
 
     const handleSubmit = async (e) => {
-        console.log(JSON.stringify(formData));
+        console.log(formData);
+        console.log(formData.certificate_submit);
+        console.log(formData.certificate);
         e.preventDefault();
         fetch(API_URL + `tutors/${cat_id}`, {
             headers: {
@@ -76,8 +78,12 @@ function Profile(props) {
         })
             .then(res => res.json())
             .then((data) => {
-                console.log(data);
+                console.log(data.certificate);
                 if (data.complete) setButtonDisabled(false);
+                data.certificate = data.certificate.join(", ");
+                data.work_hours = data.work_hours.join(", ");
+                setFormData({ ...formData, certificate_submit: data.certificate });
+                setFormData({ ...formData, work_hours_submit: data.work_hours });
                 setFormData(data);
                 setLoading(false);
             })
@@ -170,6 +176,7 @@ function Profile(props) {
                                 <Form.Group className="my-3" controlId="formBasicCountry">
                                     <Form.Label>Working hours</Form.Label>
                                     <Form.Control onChange={(e) => {
+                                        setButtonDisabled(true);
                                         let allMatch = true;
                                         let matchArray = [];
                                         e.target.value.split(",").forEach((substr) => {

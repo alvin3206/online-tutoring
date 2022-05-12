@@ -172,7 +172,7 @@ function Appointment() {
                                     <div className="d-flex align-items-end">
                                         {cat === "user" && <Button variant="warning" type="submit" className="ml-auto me-3">Update</Button>}
                                         <Link to={'/appointments'} >
-                                            <Button variant="success" className="ml-auto" onClick={() => navigate(-1)}>Go Back</Button>
+                                            <Button variant="success" className="ml-auto" onClick={() => navigate("/appointments")}>Go Back</Button>
                                         </Link>
                                     </div>
                                 </Form>
