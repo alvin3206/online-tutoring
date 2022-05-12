@@ -1,6 +1,8 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
+const path = require("path")
+const multer = require("multer");
 const auth = require('../middlewares/auth');
 const cats = ["user", "tutor"];
 
@@ -12,12 +14,153 @@ recordRoutes.use(express.json());
 recordRoutes.use(express.urlencoded({ extended: false }));
 recordRoutes.use(auth);
 
+
 // This will help us connect to the database
 const dbo = require("../db/conn");
 const { ConnectionPoolMonitoringEvent } = require("mongodb");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
+
+const storage = multer.diskStorage({
+    destination: "./public/profile",
+    filename: function (req, file, cb) {
+        cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    // limits: { fileSize: maxSize },
+    fileFilter: function (req, file, cb) {
+
+        // Set the filetypes, it is optional
+        var filetypes = /jpeg|jpg|png/;
+        var mimetype = filetypes.test(file.mimetype);
+
+        var extname = filetypes.test(path.extname(
+            file.originalname).toLowerCase());
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+
+        cb("Error: File upload only supports the "
+            + "following filetypes - " + filetypes);
+    }
+    // mypic is the name of file attribute
+}).single("mypic");
+
+recordRoutes.route("/image/:tutor_id").post(function (req, res) {
+    upload(req, res, function (err) {
+        if (err) {
+
+            // ERROR occured (here it can be occured due
+            // to uploading image of size greater than
+            // 1MB or uploading different file type)
+            res.send(err)
+        }
+        else {
+            // SUCCESS, image successfully uploaded
+            let db_connect = dbo.getDb().db("tutors");
+            let query = { _id: ObjectId(req.params.tutor_id) };
+            let updateTutor = {
+                profile_url: req.file.filename
+            }
+            db_connect
+                .collection("records")
+                .updateOne(query, {
+                    $set: updateTutor
+                }, function (err, result) {
+                    if (err) throw err;
+                    res.send("Success, Image uploaded!")
+                });
+            
+        }
+    })
+});
+
+recordRoutes.route("/hours/:cat").post(function (req, res) {
+    let query;
+    let now = new Date();
+    if (req.params.cat === "user") {
+        query = { user_id: req.body.id,  end: { $lte: now } };
+    } else {
+        query = { tutor_id: req.body.id,  end: { $lte: now } };
+    }
+    let db_connect = dbo.getDb().db("appointments");
+    db_connect
+        .collection("records")
+        .find(query)
+        .toArray(function (err, result) {
+            if (err) throw err;
+            if (result) {
+                let sum = 0;
+                // console.log(result);
+                result.forEach((e) => {
+                    sum += e.duration;
+                });
+                let updateDoc = {
+                    hours: sum,
+                }
+                // console.log(sum);
+                let db_connect_1 = dbo.getDb().db(req.params.cat + "s");
+                // console.log(req.body.id);
+                let query_1 = { _id: ObjectId(req.body.id) };
+                db_connect_1
+                    .collection("records")
+                    // .findOne(query, function (err, result) {
+                    //     if (err) throw err;
+                    //     console.log(result);
+                    //     res.json(result);
+                    // });
+                    .updateOne(query_1, {
+                        $set: updateDoc
+                    }, function (err, result) {
+                        // console.log(result);
+                        res.json("successful");
+                    });
+                // res.json("rating changes");
+            } else {
+                res.json("nothing changes");
+            }
+        });
+});
+
+recordRoutes.route("/tutors/:id/rating").get(function (req, res) {
+    let db_connect = dbo.getDb().db("appointments");
+    let query = { tutor_id: req.params.id, rating: { $gte: 0 } };
+    db_connect
+        .collection("records")
+        .find(query)
+        .toArray(function (err, result) {
+            if (err) throw err;
+            if (result) {
+                let count = 0;
+                let sum = 0;
+                result.forEach((e) => {
+                    sum += e.rating;
+                    count++;
+                });
+                let updateTutor = {
+                    rating: sum / count,
+                }
+                // console.log(updateTutor);
+                let db_connect_1 = dbo.getDb().db("tutors");
+                let query_1 = { _id: ObjectId(req.params.id) };
+                db_connect_1
+                    .collection("records")
+                    .updateOne(query_1, {
+                        $set: updateTutor
+                    }, function (err, result) {
+
+                    });
+                res.json("rating changes");
+            } else {
+                res.json("nothing changes");
+            }
+        });
+});
 
 
 // This section will help you get a list of all the records.
@@ -39,6 +182,7 @@ recordRoutes.route("/tutors/new").post(function (req, res) {
     //     last_name: req.body.last_name,
     // };
     let newTutor = {
+        profile_url: "",
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         cred_id: req.body.cred_id,
@@ -96,10 +240,12 @@ recordRoutes.route("/tutors/:id").put(function (req, res) {
     let updateTutor = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        certificate: req.body.certificate.trim().split(/\s+/),
+        certificate: req.body.certificate_submit,
         city: req.body.city,
         country: req.body.country,
         about: req.body.about,
+        work_hours: req.body.work_hours_submit,
+        complete: true,
     }
     db_connect
         .collection("records")
@@ -122,9 +268,20 @@ recordRoutes.route("/tutors/:id").delete(function (req, res) {
         });
 });
 
-recordRoutes.route("/infos").post(function (req, res) {
+recordRoutes.route("/infos/login").post(function (req, res) {
     let db_connect = dbo.getDb().db(req.body.cat + "s");
     let query = { cred_id: req.body.cred_id };
+    db_connect
+        .collection("records")
+        .findOne(query, function (err, result) {
+            if (err) throw err;
+            res.json(result);
+        });
+});
+
+recordRoutes.route("/infos/all/:cat/:id").get(function (req, res) {
+    let db_connect = dbo.getDb().db(req.params.cat + "s");
+    let query = { _id: ObjectId(req.params.id) };
     db_connect
         .collection("records")
         .findOne(query, function (err, result) {
@@ -141,7 +298,7 @@ recordRoutes.route("/appointments").get(function (req, res) {
         .toArray(function (err, result) {
             if (err) throw err;
             res.json(result);
-        });;
+        });
 });
 
 recordRoutes.route("/appointments").put(function (req, res) {
@@ -199,7 +356,7 @@ recordRoutes.route("/appointments/new").post(function (req, res) {
     let db_connect = dbo.getDb().db("appointments");
     const start = new Date(req.body.start);
     const end = new Date(req.body.end);
-    console.log(end - start);
+    // console.log(end - start);
     let newAppointment = {
         tutor_id: req.body.tutor_id,
         user_id: req.body.user_id,
@@ -210,7 +367,7 @@ recordRoutes.route("/appointments/new").post(function (req, res) {
         rating: null,
         feedback: ""
     };
-    console.log(newAppointment);
+    // console.log(newAppointment);
     db_connect.collection("records").insertOne(newAppointment, function (err, result) {
         if (err) throw err;
         res.json(result);
@@ -236,7 +393,7 @@ recordRoutes.route("/appointments/:cat").post(function (req, res) {
         .collection("records")
         .findOne(query, function (err, result) {
             if (err) throw err;
-            console.log(result);
+            // console.log(result);
             let db_1 = req.params.cat + "s";
             let db_connect_1 = dbo.getDb().db(db_1);
             let query_1 = { cred_id: result._id.toString() };

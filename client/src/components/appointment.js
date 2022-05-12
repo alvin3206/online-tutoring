@@ -180,7 +180,8 @@ function Appointment() {
                         </Card>
                     </Col>
                 </Row>
-            </Container>);
+            </Container>
+        );
     }
 
 }

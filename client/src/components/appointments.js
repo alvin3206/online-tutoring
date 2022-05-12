@@ -11,13 +11,15 @@ function Appointments() {
     const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(false);
+    const [totalHours, setTotalHours] = useState(null);
     const [flag, setFlag] = useState(true);
 
     useEffect(() => {
         setLoading(true);
         let cat = Cookies.get("cat");
+        let cat_id = Cookies.get("cat_id");
         let cred_id = Cookies.get("cred_id");
-        fetch(API_URL + `appointments/${cat}`, {
+        fetch(API_URL + `hours/${cat}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -25,20 +27,54 @@ function Appointments() {
             },
             method: "POST",
             body: JSON.stringify({
-                cred_id: cred_id,
+                id: cat_id
             })
         })
             .then(res => res.json())
             .then((data) => {
-                console.log(data);
-                setAppointments(data);
-                setLoading(false);
+                // console.log(data);
+                fetch(API_URL + `infos/all/${cat}/${cat_id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Access-Token': Cookies.get("token")
+                    }
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        setTotalHours(data.hours);
+                        fetch(API_URL + `appointments/${cat}`, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-Access-Token': Cookies.get("token")
+                            },
+                            method: "POST",
+                            body: JSON.stringify({
+                                cred_id: cred_id,
+                            })
+                        })
+                            .then(res => res.json())
+                            .then((data) => {
+                                console.log(data);
+                                setAppointments(data);
+                                setLoading(false);
+                            })
+                            .catch((error) => {
+                                console.log(error.message);
+                                setError(error);
+                                setLoading(false);
+                            });
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+
             })
             .catch((error) => {
                 console.log(error.message);
-                setError(error);
-                setLoading(false);
-            })
+            });
+
     }, [flag]);
 
     function handleDelete(item) {
@@ -58,7 +94,7 @@ function Appointments() {
             .catch((error) => {
                 console.log(error.message);
             })
-        
+
     }
 
 
@@ -70,6 +106,12 @@ function Appointments() {
     }
     else {
         return (<Container className='p-4 my-2'>
+            <div className='me-auto p-1'>
+                <h3 className='brand-font'>Status</h3>
+                <div className='p-1'>
+                    <h6 className="brand-font">Completed hours: {totalHours}</h6>
+                </div>
+            </div>
             <div className='d-flex'>
                 <div className='me-auto'>
                     <h3 className='brand-font p-1'>Appointments</h3>
@@ -88,15 +130,15 @@ function Appointments() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                      {appointments.map((item, index) => (
-                        <TableRow key={index}>
-                            <TableCell><Link to={`/appointments/${item._id}`}><Button variant='success' size="sm" className="me-3">Detail</Button></Link>{(Date.parse(item.start) - Date.now())/(1000 * 3600) >=  24.0 ? <Button variant='warning' size="sm" onClick={() => handleDelete(item)}>Cancel</Button> : ""}</TableCell>
-                            {/* <TableCell>{item.tutor_id}</TableCell> */}
-                            <TableCell>{new Date(Date.parse(item.start)).toString()}</TableCell>
-                            <TableCell>{new Date(Date.parse(item.end)).toString()}</TableCell>
-                            <TableCell>{item.duration}</TableCell>
-                        </TableRow>
-                      ))}
+                        {appointments.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell><Link to={`/appointments/${item._id}`}><Button variant='success' size="sm" className="me-3">Detail</Button></Link>{(Date.parse(item.start) - Date.now()) / (1000 * 3600) >= 24.0 ? <Button variant='warning' size="sm" onClick={() => handleDelete(item)}>Cancel</Button> : ""}</TableCell>
+                                {/* <TableCell>{item.tutor_id}</TableCell> */}
+                                <TableCell>{new Date(Date.parse(item.start)).toString()}</TableCell>
+                                <TableCell>{new Date(Date.parse(item.end)).toString()}</TableCell>
+                                <TableCell>{item.duration}</TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                     <TableBody>
 

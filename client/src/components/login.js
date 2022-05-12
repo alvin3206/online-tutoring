@@ -38,7 +38,7 @@ export default function Login() {
                 Cookies.set('token', data.token, { path: '/' });
                 Cookies.set('cred_id', data._id.toString(), { path: '/' });
                 Cookies.set('cat', data.cat, { path: '/' });
-                fetch(API_URL + 'infos', {
+                fetch(API_URL + 'infos/login', {
                     // credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',

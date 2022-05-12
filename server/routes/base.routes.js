@@ -56,6 +56,7 @@ recordRoutes.route("/tutors").get(function (req, res) {
 //     });
 // });
 
+
 recordRoutes.route("/tutors/:id").get(function (req, res) {
     let db_connect = dbo.getDb().db("tutors");
     let query = { _id: ObjectId(req.params.id) };
@@ -66,6 +67,7 @@ recordRoutes.route("/tutors/:id").get(function (req, res) {
             res.json(result);
         });
 });
+
 
 // recordRoutes.route("/tutors/:id").put(function (req, res) {
 //     let db_connect = dbo.getDb().db("tutors");
@@ -212,19 +214,19 @@ recordRoutes.route("/existed/:email").get(function (req, res, next) {
     let db_connect = dbo.getDb().db("creds");
     const { email } = req.params;
     if (!email) {
-        res.status(400).send({existed: false});
+        res.status(400).send({ existed: false });
     } else {
         db_connect
             .collection("records")
             .findOne({ email: email }, function (err, result) {
                 if (err) throw err;
                 if (result) {
-                    res.status(400).send({existed: true});
+                    res.status(400).send({ existed: true });
                 } else {
-                    res.status(200).send({existed: false});
+                    res.status(200).send({ existed: false });
                 }
             });
-        }
+    }
 });
 
 recordRoutes.route("/login").post(function (req, res, next) {
@@ -243,7 +245,7 @@ recordRoutes.route("/login").post(function (req, res, next) {
                     const passwordIsValid = bcrypt.compareSync(
                         password,
                         result.password
-                      );
+                    );
                     if (passwordIsValid) {
                         var token = jwt.sign({ user_id: result._id, email }, 'secretkey');
                         result.token = token;
@@ -255,7 +257,7 @@ recordRoutes.route("/login").post(function (req, res, next) {
                     }
                 }
             });
-        }
+    }
 });
 
 

@@ -6,6 +6,7 @@ import Footer from './components/footer';
 import Home from './components/home';
 import Login from './components/login';
 import Register from './components/register';
+import Profile from './components/profile';
 import Tutors from './components/tutors';
 import Tutor from './components/tutor';
 import Appointments from './components/appointments';
@@ -31,9 +32,10 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setNote={setNote} />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/tutors" element={<Tutors />} />
-        <Route path="/tutors/:tutorId" element={<Tutor setNote={setNote} setNoteType={setNoteType} />} />
+        <Route path="/tutors/:tutorId" element={<Tutor setNote={setNote} />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/appointments/:appointmentId" element={<Appointment />} />
         <Route path="/" element={<Home />} />

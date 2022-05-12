@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
 import Cookies from 'js-cookie';
 
-export default function Register() {
+export default function Register(props) {
     // const cookies = new Cookies();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -85,9 +85,12 @@ export default function Register() {
                     })
                         .then(res => res.json())
                         .then((data1) => {
-                            console.log(data1);
+                            // console.log(data1);
                             Cookies.set('cat_id', data1.insertedId, { path: '/' });
                             setMessage("Success");
+                            // props.setNote(`Successfully registered as ${cat}`)
+                            // if (cat === "tutor") props.setNote("Please complete your profile!");
+                            // sessionStorage.setItem("note", [`Successfully registered as ${cat}`]);
                             // setFormSubmit(true);
                             navigate("/appointments");
                             window.location.reload(false);

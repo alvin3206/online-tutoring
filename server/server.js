@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 app.use(require("./routes/base.routes"));
 app.use(require("./routes/auth.routes"));
 

@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Container, Row, Card, Col, Button, Spinner } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import { Avatar } from '@mui/material';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 // import { ToastContainer, toast } from 'react-toastify';
@@ -25,12 +26,21 @@ function Tutor(props) {
     // const [message, setMessage] = useState("");
 
     useEffect(() => {
-        // console.log(message);
-        // if (message !== "") {
-            // toast.success(message);
-        //     setMessage("");
-        // }
         setLoading(true);
+        fetch(API_URL + 'tutors/' + params.tutorId + '/rating', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Access-Token': Cookies.get("token")
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
         fetch(API_URL + 'tutors/' + params.tutorId, {
             headers: {
                 'Content-Type': 'application/json',
@@ -64,7 +74,7 @@ function Tutor(props) {
                 console.log(error.message);
                 setError(error);
                 setLoading(false);
-            })
+            });
     }, [flag]);
 
     function handleEventPropGetter(eventInfo) {
@@ -119,7 +129,6 @@ function Tutor(props) {
                     // setMessage("You made an appointment!");
                     setFlag(!flag);
                     props.setNote("You made an appointment!");
-                    console.log(props.note);
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -167,7 +176,17 @@ function Tutor(props) {
                         <Card className="shadow-sm">
                             <div className="card-body">
                                 <Row className='pb-2'>
-                                    <div className='col-2'><img src={"./images/profile/" + tutor._id + ".jpeg"} className="img-fluid rounded float-left" alt="..." /></div>
+                                    <div className='col-2'>
+                                        {/* <img src={API_URL + "profile/" + tutor.profile_url} className="img-fluid rounded float-left" alt="..." /> */}
+                                        <div className='square-div'>
+                                            <Avatar src={API_URL + "profile/" + tutor.profile_url} alt={tutor.first_name} className="img-fluid" variant="rounded"
+                                                sx={{
+                                                    width: "100%",
+                                                    height: "100%"
+                                                }}>
+                                            </Avatar>
+                                        </div>
+                                    </div>
                                     <div className='col-10'>
                                         <h3 className="card-title">{tutor.first_name} {tutor.last_name}</h3>
                                         <h4 className="card-subtitle mb-2 text-muted">{tutor.certificate.join(", ")}</h4>

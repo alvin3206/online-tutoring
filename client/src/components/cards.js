@@ -5,6 +5,7 @@ import { Rating, Avatar } from '@mui/material';
 
 function Cards(props) {
   const navigate = useNavigate();
+  const API_URL = "http://localhost:3000/";
   const rows = [];
   props.tutorList.forEach((tutor, id) => {
     rows.push(
@@ -14,7 +15,7 @@ function Cards(props) {
             <div className='row pb-2'>
               <div className='col-3'>
                 <div className='square-div'>
-                  <Avatar src={"./images/profile/" + tutor._id + ".jpeg"} alt={tutor.first_name} className="img-fluid" variant="rounded"
+                  <Avatar src={API_URL + "profile/" + tutor.profile_url} alt={tutor.first_name} className="img-fluid" variant="rounded"
                     sx={{
                       width: "100%",
                       height: "100%"

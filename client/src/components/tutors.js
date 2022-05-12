@@ -75,7 +75,7 @@ function Tutors() {
     else {
         return (
             <Container className='p-4 my-2'>
-                <div className='d-flex'>
+                <div className='d-flex my-4'>
                     <div className='me-auto'>
                         <h3 className='brand-font p-1'>Tutors</h3>
                     </div>
